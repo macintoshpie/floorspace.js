@@ -90,6 +90,7 @@ export default function importFloorplan(context, payload) {
       faces: faces.sort(sortById),
       edges: edges.sort(sortById),
       vertices: story.geometry.vertices.sort(sortById),
+      verticesMap: _.keyBy(story.geometry.vertices, 'id'),
     };
   });
 

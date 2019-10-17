@@ -236,16 +236,6 @@ export function cleanInvalidPoly(vertices) {
   return vertices;
 }
 
-function binarySearch(list, target, s, e) {
-  if (s > e) {
-    return -1;
-  }
-  const m = Math.floor((s + e)/2);
-  if (target == list[m].id) return m;
-  if (+target > +(list[m].id)) return binarySearch(list,target,m,e);
-  if (+target < +(list[m].id)) return binarySearch(list,target,s,m);
-}
-
 const helpers = {
   /*
   * given two sets of points defining two faces
@@ -400,13 +390,7 @@ const helpers = {
 
     // given a vertex id, find the vertex on the geometry set with that id
     vertexForId(vertex_id, geometry) {
-        // do binary search here...
-        const idx = binarySearch(geometry.vertices, vertex_id, 0, geometry.vertices.length);
-        return idx >= 0 ? geometry.vertices[idx] : console.log("Failed to find id: ", vertex_id);
-        // console.log('Bin Search Index: ', idx);
-        // console.log('index of result: ', geometry.vertices.findIndex(v => v.id === vertex_id));
-        // const idx = _.sortedIndexOf(geometry.vertices, vertex_id)
-        return geometry.vertices.find(v => v.id === vertex_id);
+        return geometry.verticesMap[vertex_id];
     },
 
     // given a set of coordinates, find the vertex on the geometry set within their tolerance zone
