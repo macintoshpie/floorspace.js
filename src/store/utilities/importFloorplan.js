@@ -58,6 +58,10 @@ function withStoryDefaults(stories) {
   });
 }
 
+function sortById(a, b) {
+  return +a.id > +b.id ? 1 : -1;
+}
+
 export default function importFloorplan(context, payload) {
   // intialize a versionNumber if the app is running in embedded mode
   if (window.api) { window.versionNumber = 0; }
@@ -83,9 +87,9 @@ export default function importFloorplan(context, payload) {
     }));
     return {
       id: story.geometry.id,
-      faces,
-      edges,
-      vertices: story.geometry.vertices,
+      faces: faces.sort(sortById),
+      edges: edges.sort(sortById),
+      vertices: story.geometry.vertices.sort(sortById),
     };
   });
 
