@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import KDBush from 'kdbush';
 import factory from './../factory';
 import geometryHelpers, { distanceBetweenPoints } from './../helpers';
 import modelHelpers from './../../models/helpers';
@@ -405,8 +406,9 @@ function replacementEdgeRefs(geometry, dyingEdgeId, newEdges) {
 
 export function edgesToSplit(geometry, spacing) {
   const priorIterationEdges = [];
+  const verticesIndex = new KDBush(geometry.vertices, p => p.x, p => p.y);
   return _.compact(geometry.edges.map((edge) => {
-    let splittingVertices = geometryHelpers.splittingVerticesForEdgeId(edge.id, geometry, spacing);
+    let splittingVertices = geometryHelpers.splittingVerticesForEdgeId(edge.id, geometry, spacing, verticesIndex);
     if (!splittingVertices.length) {
       return false;
     }

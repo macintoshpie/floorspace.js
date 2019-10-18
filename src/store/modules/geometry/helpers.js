@@ -283,12 +283,17 @@ const helpers = {
     /*
      * return the set of saved vertices directly on an edge, not including edge endpoints
      */
-  splittingVerticesForEdgeId(edge_id, geometry, spacing) {
+  splittingVerticesForEdgeId(edge_id, geometry, spacing, verticesIndex) {
     const edge = geometry.edges.find(e => e.id === edge_id),
       edgeV1 = this.vertexForId(edge.v1, geometry),
-      edgeV2 = this.vertexForId(edge.v2, geometry);
+      edgeV2 = this.vertexForId(edge.v2, geometry),
+      minX = Math.min(edgeV1.x, edgeV2.x),
+      minY = Math.min(edgeV1.y, edgeV2.y),
+      maxX = Math.max(edgeV1.x, edgeV2.x),
+      maxY = Math.max(edgeV1.y, edgeV2.y);
       // look up all vertices touching the edge, ignoring the edge's endpoints
-    const verticesToSplit = geometry.vertices.filter((vertex) => {
+    const verticesToSplit = verticesIndex.range(minX, minY, maxX, maxY)
+      .map(idx => geometry.vertices[idx]).filter((vertex) => {
       const
         vertexIsEndpointById = edge.v1 === vertex.id || edge.v2 === vertex.id,
         vertexIsLeftEndpointByValue = edgeV1.x === vertex.x && edgeV1.y === vertex.y,
